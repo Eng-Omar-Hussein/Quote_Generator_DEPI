@@ -1,0 +1,41 @@
+# Dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+
+# Environment files
+.env
+.env.*
+
+# Database
+*.db
+*.sqlite
+data/
+
+# Git
+.git/
+.gitignore
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# Documentation
+*.md
+!README.quote-service.md
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Testing & CI
+.github/
+coverage/
+test/
+*.test.js
+*.spec.js
+
+# Misc
+logs/
+*.log
