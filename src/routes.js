@@ -6,7 +6,7 @@
 const express = require('express');
 const db = require('./db');
 const profanityFilter = require('./profanityFilter');
-const { register, Counter } = require('prom-client');
+const { register, Counter, Histogram } = require('prom-client');
 
 const router = express.Router();
 
@@ -24,6 +24,38 @@ const quotesAddedCounter = new Counter({
 const profanityBlockedCounter = new Counter({
   name: 'profanity_blocked_total',
   help: 'Total number of quotes blocked due to profanity'
+});
+
+// New: HTTP request counter (method, route, status) and request duration histogram
+const httpRequestsCounter = new Counter({
+  name: 'http_requests_total',
+  help: 'Total number of HTTP requests received',
+  labelNames: ['method', 'route', 'status']
+});
+
+const requestDurationHistogram = new Histogram({
+  name: 'http_request_duration_seconds',
+  help: 'Histogram of HTTP request durations in seconds',
+  labelNames: ['method', 'route'],
+  buckets: [0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1, 2.5, 5]
+});
+
+// Middleware: observe every request (route-level)
+router.use((req, res, next) => {
+  // Use the raw path as the route label (includes queryless path)
+  const routeLabel = req.route?.path || req.path || req.originalUrl || req.url;
+
+  // Start timer for duration histogram with labels
+  const endTimer = requestDurationHistogram.startTimer({ method: req.method, route: routeLabel });
+
+  res.on('finish', () => {
+    // Increment HTTP requests counter with status code
+    httpRequestsCounter.inc({ method: req.method, route: routeLabel, status: String(res.statusCode) });
+    // Stop the timer and record duration
+    endTimer();
+  });
+
+  next();
 });
 
 /**
