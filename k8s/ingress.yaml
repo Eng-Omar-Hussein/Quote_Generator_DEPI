@@ -1,0 +1,29 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: quote-ingress
+  namespace: quote-generator
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    # Rewrite backend API path from /api/(.*) to /$1 so backend receives the same paths it expects
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+spec:
+  rules:
+    - http:
+        paths:
+          # Route frontend (root) to the frontend service
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: quote-frontend
+                port:
+                  number: 80
+          # Route /api/... to the backend service. The rewrite-target annotation rewrites to /<rest>
+          - path: /api(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: quote-backend
+                port:
+                  number: 3000
