@@ -21,7 +21,7 @@ spec:
           # set imagePullPolicy: Never so the kubelet uses the local image.
           # If you push to a remote registry, replace this with your registry image
           # and set imagePullPolicy to IfNotPresent (or leave as default).
-          image: localhost/quote-frontend:local
+          image: ahmedbakry1/quote-frontend:local
           imagePullPolicy: Never
           ports:
             - containerPort: 80
