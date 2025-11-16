@@ -142,9 +142,9 @@ for i in {1..5}; do
     fi
 done
 if [ "$success_count" -eq 5 ]; then
-    print_result 1 "Multiple random quote requests ($success_count/5)"
-else
     print_result 0 "Multiple random quote requests ($success_count/5)"
+else
+    print_result 1 "Multiple random quote requests ($success_count/5)"
 fi
 echo ""
 
