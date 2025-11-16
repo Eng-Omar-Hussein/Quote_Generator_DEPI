@@ -2,7 +2,7 @@ name: CI pilpelines
 on: 
   push:
     branches:
-      - features
+      - main
 jobs:
   deploy:
     runs-on: ubuntu-latest
