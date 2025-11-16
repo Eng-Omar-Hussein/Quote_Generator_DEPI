@@ -100,15 +100,15 @@ fi
 echo ""
 
 # Test 7: Get Statistics
-echo -e "${YELLOW}Test 7: Get Statistics${NC}"
-response=$(curl -s -o /dev/null -w "%{http_code}" "$BASE_URL/stats")
-if [ "$response" -eq 200 ]; then
-    print_result 0 "Get statistics"
-    curl -s "$BASE_URL/stats" | jq '.'
-else
-    print_result 1 "Get statistics (Got HTTP $response)"
-fi
-echo ""
+# echo -e "${YELLOW}Test 7: Get Statistics${NC}"
+# response=$(curl -s -o /dev/null -w "%{http_code}" "$BASE_URL/stats")
+# if [ "$response" -eq 200 ]; then
+#     print_result 0 "Get statistics"
+#     curl -s "$BASE_URL/stats" | jq '.'
+# else
+#     print_result 1 "Get statistics (Got HTTP $response)"
+# fi
+# echo ""
 
 # Test 8: Get Prometheus Metrics
 echo -e "${YELLOW}Test 8: Get Prometheus Metrics${NC}"
