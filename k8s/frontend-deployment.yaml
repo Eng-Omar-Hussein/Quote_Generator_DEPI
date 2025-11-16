@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: quote-frontend
+  namespace: quote-generator
+  labels:
+    app: quote-frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: quote-frontend
+  template:
+    metadata:
+      labels:
+        app: quote-frontend
+    spec:
+      containers:
+        - name: frontend
+          # For local clusters (kind/minikube) you can build the image locally and
+          # set imagePullPolicy: Never so the kubelet uses the local image.
+          # If you push to a remote registry, replace this with your registry image
+          # and set imagePullPolicy to IfNotPresent (or leave as default).
+          image: ahmedbakry1/quote-frontend:local
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 80
+              name: http
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "64Mi"
+            limits:
+              cpu: "250m"
+              memory: "256Mi"
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 20
+            periodSeconds: 30
+            timeoutSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 5

@@ -37,6 +37,17 @@ services:
       - '--config.file=/etc/prometheus/prometheus.yml'
     restart: always
 
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3001:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    depends_on:
+      - prometheus
+
 volumes:
   quote_data:
   prometheus_data:
