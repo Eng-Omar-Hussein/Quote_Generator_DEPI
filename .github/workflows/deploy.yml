@@ -1,0 +1,32 @@
+name: CI pilpelines
+on: 
+  push:
+    branches:
+      - main
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Start containers
+        run: docker compose up -d --build
+
+      - name: Wait for API to be ready
+        run: |
+          echo "Waiting for service to be ready..."
+          sleep 5
+
+      - name: Make script executable
+        working-directory: scripts
+        run: chmod +x test-api.sh
+
+      - name: Run API tests
+        working-directory: scripts
+        run: ./test-api.sh
+      # - name: docker login
+      #   run: docker login -u "${{ secrets.DOCKER_USERNAME }}" -p "${{ secrets.DOCKER_PASSWORD }}"
+
+      # - name: Build Docker image
+      #   run: docker build -t my-app:${{ github.sha }} -f ./frontend/Dockerfile.dev ./frontend
