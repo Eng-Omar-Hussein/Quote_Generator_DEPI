@@ -10,10 +10,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: test api
-        run: |
-          cd scripts
-          ./run_api_tests.sh
+      - name: Run API tests
+        working-directory: scripts
+        run: ./run_api_tests.sh
 
       # - name: docker login
       #   run: docker login -u "${{ secrets.DOCKER_USERNAME }}" -p "${{ secrets.DOCKER_PASSWORD }}"
